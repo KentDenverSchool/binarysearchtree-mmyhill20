@@ -1,7 +1,7 @@
 
 public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 
-    private Node<Key, Value> root;
+    public Node<Key, Value> root;
 
     public BinarySearchTree() {
         root = null;
@@ -95,7 +95,10 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 
     //returns the node at the right most right branch of n
     private Node<Key, Value> min(Node<Key, Value> n) {
-            if (n.getRight().equals(null)) return n;
+        if(n == null){
+            return null;
+        }
+        if (n.getRight()== null) return n;
             else return min(n.getRight());
     }
 
@@ -105,9 +108,13 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 
     //returns the node at the left most left branch of n
     private Node<Key, Value> max(Node<Key, Value> n) {
-        if (n.getLeft().equals(null)) return n;
-        else return min(n.getLeft());
-    }
+           if(n == null){
+               return null;
+           }
+            if (n.getLeft() ==null) return n;
+           else return  max(n.getLeft());
+       }
+
 
 
     public String toString() {
@@ -121,5 +128,21 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
         return toString(n.getLeft()) +
                 n.getKey() + "=" + n.getValue() + ", " +
                 toString(n.getRight());
+    }
+
+    public static boolean isBST(BinarySearchTree t){
+        return isBST(t.root);
+    }
+
+    private static boolean isBST(Node n){
+        if(n == null)return true;//is empty, is BST
+        else if(n.getLeft() == null && n.getRight() == null)return true;//is only node, is BST
+        else{
+            if(n.getRight() == null)return (n.getKey().compareTo(n.getLeft().getKey()) < 0) && isBST(n.getLeft());//left is > current && is right is null, but not both
+            else if(n.getLeft() == null)return (n.getKey().compareTo(n.getRight().getKey()) > 0) && isBST(n.getRight());
+            else return (n.getKey().compareTo(n.getRight().getKey()) > 0) && isBST(n.getRight()) &&
+                        (n.getKey().compareTo(n.getLeft().getKey()) < 0) && isBST(n.getLeft());
+        }
+
     }
 }
